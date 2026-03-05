@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - REDIS_HOST=cache
+
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: ./usrc/src/app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+  cache:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
